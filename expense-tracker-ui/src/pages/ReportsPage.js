@@ -3,9 +3,13 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@clerk/clerk-react';
-import PDFPreview from '../components/PDFPreview';
-import { generatePDF } from '../utils/pdfGenerator';
+import PDFPreview from '../components/PDFPreview'; // Assuming this path is correct
+import { generatePDF } from '../utils/pdfGenerator'; // Assuming this path is correct
 import './ReportsPage.css';
+
+// --- START OF FIX ---
+const API_URL = process.env.REACT_APP_API_URL;
+// --- END OF FIX ---
 
 function ReportsPage() {
   const { getToken } = useAuth();
@@ -32,9 +36,10 @@ function ReportsPage() {
       try {
         const token = await getToken();
         const headers = { Authorization: `Bearer ${token}` };
+        // --- FIX: Use API_URL environment variable ---
         const [projectRes, profileRes] = await Promise.all([
-          axios.get(`http://localhost:5000/api/projects/${projectId}`, { headers }),
-          axios.get('http://localhost:5000/api/profile', { headers }),
+          axios.get(`${API_URL}/api/projects/${projectId}`, { headers }),
+          axios.get(`${API_URL}/api/profile`, { headers }),
         ]);
         setProject(projectRes.data || {});
         setCompanyProfile(profileRes.data || {});
@@ -55,8 +60,9 @@ function ReportsPage() {
               const headers = { Authorization: `Bearer ${token}` };
               const params = { startDate, endDate };
               
-              const expensesPromise = axios.get(`http://localhost:5000/api/projects/${projectId}/expenses`, { params, headers });
-              const paymentsPromise = axios.get(`http://localhost:5000/api/payments/range/${projectId}`, { params, headers });
+              // --- FIX: Use API_URL environment variable ---
+              const expensesPromise = axios.get(`${API_URL}/api/projects/${projectId}/expenses`, { params, headers });
+              const paymentsPromise = axios.get(`${API_URL}/api/payments/range/${projectId}`, { params, headers });
               
               const [expensesRes, paymentsRes] = await Promise.all([expensesPromise, paymentsPromise]);
               
@@ -85,6 +91,7 @@ function ReportsPage() {
   const netFlowInPeriod = paymentsInPeriod - expensesInPeriod;
   const dateRange = { start: startDate, end: endDate };
 
+    // ... The rest of the component's JSX remains exactly the same
   return (
     <div className="reports-container">
       <header className="reports-header">

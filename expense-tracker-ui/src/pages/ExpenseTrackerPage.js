@@ -5,7 +5,12 @@ import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
 import './ExpenseTrackerPage.css';
 
+// --- START OF FIX ---
+const API_URL = process.env.REACT_APP_API_URL;
+// --- END OF FIX ---
+
 const structureTabs = (rawExpenses) => {
+    // ... (rest of the function is unchanged)
     const structured = {
         labour: { title: 'Labour', items: [] },
         cement: { title: 'Cement & Aggregates', items: [] },
@@ -41,6 +46,7 @@ const structureTabs = (rawExpenses) => {
 };
 
 const flattenTabs = (tabsData) => {
+    // ... (rest of the function is unchanged)
     const flatExpenses = [];
     Object.values(tabsData).forEach(tab => {
         if (tab.items) {
@@ -62,6 +68,7 @@ const flattenTabs = (tabsData) => {
 };
 
 const calculateRowTotal = (item, isSimplified = false) => {
+  // ... (rest of the function is unchanged)
   const price = parseFloat(item.price) || 0;
   if (isSimplified) { return price; }
   const count = parseFloat(item.count) || 0;
@@ -88,7 +95,8 @@ export default function ExpenseTrackerPage() {
     setTabsData(null);
     try {
         const token = await getToken();
-        const response = await axios.get(`http://localhost:5000/api/expenses/template/${projectId}`, { 
+        // --- FIX: Use API_URL environment variable ---
+        const response = await axios.get(`${API_URL}/api/expenses/template/${projectId}`, { 
             params: { date },
             headers: { Authorization: `Bearer ${token}` } 
         });
@@ -106,7 +114,8 @@ export default function ExpenseTrackerPage() {
     const fetchProjectDetails = async () => {
         try {
             const token = await getToken();
-            const res = await axios.get(`http://localhost:5000/api/projects/${projectId}`, {
+            // --- FIX: Use API_URL environment variable ---
+            const res = await axios.get(`${API_URL}/api/projects/${projectId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setProject(res.data);
@@ -121,6 +130,7 @@ export default function ExpenseTrackerPage() {
 
   useEffect(() => {
     if (!tabsData) return;
+    // ... (rest of the useEffect is unchanged)
     let total = 0;
     Object.values(tabsData).forEach(tab => {
       if (tab.items) {
@@ -144,7 +154,8 @@ export default function ExpenseTrackerPage() {
 
     try {
         const token = await getToken();
-        const res = await axios.post('http://localhost:5000/api/expenses/save', payload, {
+        // --- FIX: Use API_URL environment variable ---
+        const res = await axios.post(`${API_URL}/api/expenses/save`, payload, {
             headers: { Authorization: `Bearer ${token}` }
         });
         toast.dismiss();
@@ -155,6 +166,7 @@ export default function ExpenseTrackerPage() {
     }
   };
   
+  // ... The rest of your component (handleInputChange, handleAddItem, handleRemoveItem, render methods, JSX) remains exactly the same
   const handleInputChange = (value, tabKey, itemIndex, field, sectionKey = null) => {
     setTabsData(currentTabsData => {
         const newTabsData = JSON.parse(JSON.stringify(currentTabsData));
@@ -205,10 +217,7 @@ export default function ExpenseTrackerPage() {
     });
     setIsConfirmModalOpen(true);
   };
-
-  // ... The rest of your component (render methods, JSX) remains exactly the same
   const TrashIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.134-2.033-2.134H8.033C6.91 2.75 6 3.704 6 4.87v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg> );
-
   const renderTableRows = (items, tabKey, sectionKey = null) => items.map((item, index) => (
     <tr key={`${tabKey}-${sectionKey || 'main'}-${item.name}-${index}`}>
       <td>{item.name}</td>
@@ -219,7 +228,6 @@ export default function ExpenseTrackerPage() {
       <td><button onClick={() => handleRemoveItem(tabKey, index, sectionKey)} className="delete-button"><TrashIcon /></button></td>
     </tr>
   ));
-
   const renderSalaryTable = (sectionKey) => {
     if (!tabsData.advance || !tabsData.advance.sections || !tabsData.advance.sections[sectionKey]) return null;
     const section = tabsData.advance.sections[sectionKey];
@@ -243,7 +251,6 @@ export default function ExpenseTrackerPage() {
       </div>
     );
   };
-
   const renderStandardTable = (tabKey) => {
     if (!tabsData[tabKey] || !tabsData[tabKey].items) return <p>Loading table...</p>;
     return (
@@ -257,8 +264,7 @@ export default function ExpenseTrackerPage() {
       </div>
     );
   };
-  
-    const renderAdvanceTable = (tabKey) => {
+  const renderAdvanceTable = (tabKey) => {
     if (!tabsData[tabKey] || !tabsData[tabKey].sections) return <p>Loading table...</p>;
     return (
       <div className="expense-table-container">
@@ -267,7 +273,6 @@ export default function ExpenseTrackerPage() {
       </div>
     );
   };
-
   return (
     <div className="app-container">
       <header className="app-header">

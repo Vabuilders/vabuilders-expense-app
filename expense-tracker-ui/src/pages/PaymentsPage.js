@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
 import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
 import './PaymentsPage.css';
+
+// --- START OF FIX ---
+const API_URL = process.env.REACT_APP_API_URL;
+// --- END OF FIX ---
 
 const EditIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.172 2.15-1.157 1.157 3.707 3.707 1.157-1.157zM11.5 6.5 7.793 2.793 2.5 8.086V11.5h3.414zM2 12h-.5a.5.5 0 0 0-.5.5V15h3.5a.5.5 0 0 0 .5-.5V14h-1v-1h-1v-1zm10.5-2a.5.5 0 0 0-.5.5v1h1v1h1v-1.5a.5.5 0 0 0-.5-.5z"/></svg>;
 const DeleteIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>;
@@ -25,13 +29,13 @@ function PaymentsPage() {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [paymentToDelete, setPaymentToDelete] = useState(null);
 
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const token = await getToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const projectPromise = axios.get(`http://localhost:5000/api/projects/${projectId}`, { headers });
-            const paymentsPromise = axios.get(`http://localhost:5000/api/payments/${projectId}`, { headers });
+            // --- FIX: Use API_URL environment variable ---
+            const projectPromise = axios.get(`${API_URL}/api/projects/${projectId}`, { headers });
+            const paymentsPromise = axios.get(`${API_URL}/api/payments/${projectId}`, { headers });
 
             const [projectRes, paymentsRes] = await Promise.all([projectPromise, paymentsPromise]);
             setProject(projectRes.data);
@@ -40,11 +44,11 @@ function PaymentsPage() {
             toast.error('Could not fetch page data.');
             console.error("Error fetching data:", err);
         }
-    };
+    }, [projectId, getToken]); // Added dependencies
 
     useEffect(() => {
         fetchData();
-    }, [projectId]);
+    }, [fetchData]); // Correct dependency
 
     const resetModal = () => {
         setShowModal(false);
@@ -78,7 +82,8 @@ function PaymentsPage() {
         toast.loading('Deleting payment...');
         try {
             const token = await getToken();
-            await axios.delete(`http://localhost:5000/api/payments/${paymentToDelete._id}`, {
+            // --- FIX: Use API_URL environment variable ---
+            await axios.delete(`${API_URL}/api/payments/${paymentToDelete._id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             toast.dismiss();
@@ -109,9 +114,10 @@ function PaymentsPage() {
         try {
             const token = await getToken();
             const headers = { Authorization: `Bearer ${token}` };
+            // --- FIX: Use API_URL environment variable ---
             const apiCall = isEditing 
-                ? axios.put(`http://localhost:5000/api/payments/${currentPayment._id}`, paymentData, { headers })
-                : axios.post(`http://localhost:5000/api/payments/add`, paymentData, { headers });
+                ? axios.put(`${API_URL}/api/payments/${currentPayment._id}`, paymentData, { headers })
+                : axios.post(`${API_URL}/api/payments/add`, paymentData, { headers });
             
             await apiCall;
             toast.dismiss();
@@ -127,6 +133,7 @@ function PaymentsPage() {
 
     const totalPaid = project ? project.ownerPaid : 0;
 
+    // ... The rest of the component's JSX remains exactly the same
     return (
         <div className="payments-container">
             <header className="payments-header">
