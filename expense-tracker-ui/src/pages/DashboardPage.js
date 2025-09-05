@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Import useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -17,19 +17,16 @@ export default function DashboardPage() {
   const [onConfirm, setOnConfirm] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [deletingProjectId, setDeletingProjectId] = useState(null);
-
   const [isEditBudgetModalOpen, setIsEditBudgetModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [editingBudget, setEditingBudget] = useState('');
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // Wrap fetchProjects in useCallback to stabilize the function
   const fetchProjects = useCallback(async () => {
     try {
       const token = await getToken();
-      // CORRECTED: Removed trailing slash
-      const response = await axios.get(`${API_URL}/api/projects`, {
+      const response = await axios.get(`${API_URL}/api/projects`, { // FIXED PATH
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(response.data);
@@ -37,11 +34,11 @@ export default function DashboardPage() {
       console.error("Error fetching projects from frontend:", error);
       toast.error('Could not fetch projects.');
     }
-  }, [getToken, API_URL]); // Dependencies for useCallback
+  }, [getToken, API_URL]);
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]); // Now, fetchProjects is a stable dependency for useEffect
+  }, [fetchProjects]);
 
   const handleCreateProject = async () => {
     if (!newProjectName || !newProjectBudget) {
@@ -50,8 +47,7 @@ export default function DashboardPage() {
     try {
       const token = await getToken();
       const newProject = { projectName: newProjectName, totalBudget: newProjectBudget };
-      // CORRECTED: Removed trailing slash
-      await axios.post(`${API_URL}/api/projects/add`, newProject, {
+      await axios.post(`${API_URL}/api/projects/add`, newProject, { // FIXED PATH
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Project Created Successfully!');
@@ -70,8 +66,7 @@ export default function DashboardPage() {
     setOnConfirm(() => async () => {
       try {
         const token = await getToken();
-        // CORRECTED: Removed trailing slash
-        await axios.delete(`${API_URL}/api/projects/${project._id}`, {
+        await axios.delete(`${API_URL}/api/projects/${project._id}`, { // FIXED PATH
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Project deleted.');
@@ -101,8 +96,7 @@ export default function DashboardPage() {
     toast.loading('Updating budget...');
     try {
       const token = await getToken();
-      // CORRECTED: Removed trailing slash
-      await axios.patch(`${API_URL}/api/projects/${editingProject._id}/update-budget`, {
+      await axios.patch(`${API_URL}/api/projects/${editingProject._id}/update-budget`, { // FIXED PATH
         totalBudget: editingBudget
       }, {
         headers: { Authorization: `Bearer ${token}` },

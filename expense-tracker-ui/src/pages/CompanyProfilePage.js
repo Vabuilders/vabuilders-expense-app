@@ -16,14 +16,12 @@ function CompanyProfilePage() {
 
     const API_URL = process.env.REACT_APP_API_URL;
 
-    // --- FIX 5 & 6: Improved useEffect and simplified logo URL handling ---
-    // Added getToken and API_URL to dependency array for correctness.
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 toast.loading('Loading profile...');
                 const token = await getToken();
-                const response = await axios.get(`${API_URL}/api/profile/`, {
+                const response = await axios.get(`${API_URL}/api/profile`, { // FIXED PATH
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 toast.dismiss();
@@ -33,9 +31,9 @@ function CompanyProfilePage() {
                     setAddressLine1(profile.addressLine1 || '');
                     setAddressLine2(profile.addressLine2 || '');
                     setAddressLine3(profile.addressLine3 || '');
-                    // The backend now provides the full, ready-to-use URL.
                     if (profile.logoUrl) {
-                        setLogoPreview(profile.logoUrl);
+                        const url = profile.logoUrl.startsWith('/') ? profile.logoUrl : `/${profile.logoUrl}`;
+                        setLogoPreview(`${API_URL}${url}`);
                     }
                 }
             } catch (error) {
@@ -60,7 +58,7 @@ function CompanyProfilePage() {
         toast.loading('Saving changes...');
         try {
             const token = await getToken();
-            const response = await axios.post(`${API_URL}/api/profile/update`, formData, {
+            const response = await axios.post(`${API_URL}/api/profile/update`, formData, { // FIXED PATH
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}` 
@@ -68,14 +66,13 @@ function CompanyProfilePage() {
             });
             toast.dismiss();
             toast.success('Profile updated successfully!');
-            // The backend now provides the full, ready-to-use URL.
             if (response.data.logoUrl) {
-                setLogoPreview(response.data.logoUrl);
+                const url = response.data.logoUrl.startsWith('/') ? response.data.logoUrl : `/${response.data.logoUrl}`;
+                setLogoPreview(`${API_URL}${url}`);
             }
         } catch (error) {
             toast.dismiss();
-            const errorMsg = error.response?.data?.message || 'Failed to update profile.';
-            toast.error(errorMsg);
+            toast.error('Failed to update profile.');
         }
     };
 
@@ -86,8 +83,7 @@ function CompanyProfilePage() {
             setLogoPreview(URL.createObjectURL(file));
         }
     };
-    
-    // ... (The rest of the component's JSX remains exactly the same)
+
     return (
         <div className="profile-container">
             <header className="profile-header">
@@ -113,7 +109,7 @@ function CompanyProfilePage() {
                         <input type="text" id="companyAddress2" value={addressLine2} onChange={(e) => setAddressLine2(e.target.value)} />
                     </div>
                      <div className="form-group">
-                        <label htmlFor="companyAddress3">City & Pincode</label>
+                        <label htmlFor="companyAddress3">Address Line 3 (City & Pincode)</label>
                         <input type="text" id="companyAddress3" value={addressLine3} onChange={(e) => setAddressLine3(e.target.value)} />
                     </div>
                     <div className="form-group">
