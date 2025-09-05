@@ -51,6 +51,10 @@ const profileRouter = require('./routes/profile');
 app.use(ClerkExpressWithAuth());
 
 app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  // ✅ Check Clerk auth only for real API calls
   if (!req.auth || !req.auth.userId) {
     return res.status(401).send('Unauthenticated!');
   }
