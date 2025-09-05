@@ -9,7 +9,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // --- MIDDLEWARE ---
-app.use(cors());
+const corsOptions = {
+  origin: 'https://app.vabuilders.in'
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // --- DATABASE CONNECTION ---
