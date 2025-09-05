@@ -9,8 +9,20 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // --- MIDDLEWARE ---
+// --- FIX 4: Flexible CORS configuration for Production and Development ---
+const allowedOrigins = ['https://app.vabuilders.in'];
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.push('http://localhost:3000');
+}
+
 const corsOptions = {
-  origin: 'https://app.vabuilders.in'
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 };
 app.use(cors(corsOptions));
 app.use(express.json());

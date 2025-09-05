@@ -4,6 +4,16 @@ const path = require('path');
 const fs = require('fs');
 let Profile = require('../models/profile.model');
 
+// --- FIX 3: Add file filter for security to only allow images ---
+const imageFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+      req.fileValidationError = 'Only image files are allowed!';
+      return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dir = 'uploads/';
@@ -15,7 +25,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.route('/').get(async (req, res) => {
     try {
@@ -24,7 +34,15 @@ router.route('/').get(async (req, res) => {
             profile = new Profile({ userId: req.auth.userId });
             await profile.save();
         }
-        res.json(profile);
+        
+        const profileObject = profile.toObject();
+        // --- FIX 6: Always return a full URL from the backend ---
+        if (profileObject.logoUrl) {
+            const baseUrl = `${req.protocol}://${req.get('host')}`;
+            profileObject.logoUrl = `${baseUrl}/${profileObject.logoUrl}`;
+        }
+
+        res.json(profileObject);
     } catch (err) {
         res.status(400).json('Error: ' + err);
     }
@@ -32,6 +50,11 @@ router.route('/').get(async (req, res) => {
 
 router.route('/update').post(upload.single('logo'), async (req, res) => {
     try {
+        // Handle file validation error from multer
+        if (req.fileValidationError) {
+            return res.status(400).json({ message: req.fileValidationError });
+        }
+
         const { companyName, addressLine1, addressLine2, addressLine3 } = req.body;
         
         const updateData = {
@@ -42,6 +65,7 @@ router.route('/update').post(upload.single('logo'), async (req, res) => {
         };
 
         if (req.file) {
+            // Store relative path in DB
             updateData.logoUrl = `uploads/${req.file.filename}`;
         }
 
@@ -51,9 +75,16 @@ router.route('/update').post(upload.single('logo'), async (req, res) => {
             { new: true, upsert: true }
         );
 
-        res.json(updatedProfile);
+        const profileObject = updatedProfile.toObject();
+        // --- FIX 6: Always return a full URL from the backend ---
+        if (profileObject.logoUrl) {
+             const baseUrl = `${req.protocol}://${req.get('host')}`;
+             profileObject.logoUrl = `${baseUrl}/${profileObject.logoUrl}`;
+        }
+
+        res.json(profileObject);
     } catch (err) {
-        res.status(400).json('Error: ' + err);
+        res.status(400).json('Error: ' + err.message);
     }
 });
 

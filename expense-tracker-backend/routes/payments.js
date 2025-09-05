@@ -6,6 +6,10 @@ const Project = require('../models/project.model.js');
 
 router.get('/:projectId', async (req, res) => {
   try {
+    // --- FIX 1: Added validation to prevent server crash from invalid MongoDB ObjectIds ---
+    if (!mongoose.Types.ObjectId.isValid(req.params.projectId)) {
+        return res.status(400).json({ message: 'Invalid Project ID.' });
+    }
     const project = await Project.findOne({ _id: req.params.projectId, userId: req.auth.userId });
     if (!project) {
         return res.status(404).json({ message: 'Project not found.' });
@@ -21,6 +25,11 @@ router.get('/range/:projectId', async (req, res) => {
     try {
         const { projectId } = req.params;
         const { startDate, endDate } = req.query;
+
+        // --- FIX 1: Added validation to prevent server crash from invalid MongoDB ObjectIds ---
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            return res.status(400).json({ message: 'Invalid Project ID.' });
+        }
 
         const project = await Project.findOne({ _id: projectId, userId: req.auth.userId });
         if (!project) {
@@ -50,6 +59,7 @@ router.get('/range/:projectId', async (req, res) => {
     }
 });
 
+// ... (The rest of the file remains unchanged, but is included for completeness)
 router.post('/add', async (req, res) => {
   const { projectId, paymentDate, amount, description } = req.body;
   const paymentAmount = Number(amount);
@@ -132,5 +142,6 @@ router.delete('/:paymentId', async (req, res) => {
         session.endSession();
     }
 });
+
 
 module.exports = router;

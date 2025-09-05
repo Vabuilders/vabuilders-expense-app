@@ -39,17 +39,15 @@ exports.getExpenseTemplateForDate = async (req, res) => {
                 expenseDate: { $gte: latestDateStart, $lte: latestDateEnd }
             });
             
-            const advanceCategories = [
-                'Advances Given (Reminders)', 'Staff Salaries', 'Food and Snacks', 
-                'Personal Expenses', 'Other Miscellaneous Expenses'
-            ];
-
+            // --- FIX 2: Correct template generation logic ---
+            // The goal is to keep the item structure, but clear all financial values for the new day.
+            // The original logic incorrectly kept old prices for non-advance categories.
             const newTemplate = latestDayStructure.map(item => ({
                 category: item.category,
                 itemName: item.itemName,
-                price: advanceCategories.includes(item.category) ? '' : item.price,
-                count: '',
-                other: '',
+                price: '', // Always clear price for a new day
+                count: '', // Always clear count
+                other: '', // Always clear other fields
                 total: 0,
             }));
             
@@ -73,6 +71,11 @@ exports.getProjectExpensesByDateRange = async (req, res) => {
 
     if (!startDate || !endDate) {
       return res.status(400).json({ message: 'Please provide both a start and end date.' });
+    }
+    
+    // This validation was added in payments.js, good practice to have it here too.
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+        return res.status(400).json({ message: 'Invalid Project ID.' });
     }
 
     const project = await Project.findOne({ _id: projectId, userId: userId });
