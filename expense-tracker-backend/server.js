@@ -9,22 +9,28 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // --- MIDDLEWARE ---
-// --- FIX 4: Flexible CORS configuration for Production and Development ---
-const allowedOrigins = ['https://app.vabuilders.in'];
-if (process.env.NODE_ENV !== 'production') {
-  allowedOrigins.push('http://localhost:3000');
-}
 
-const corsOptions = {
+// ✅ CORS FIX: Place this at the top, before routes
+const allowedOrigins = [
+  'https://app.vabuilders.in',       // production frontend
+  'http://localhost:3000'            // local dev frontend
+];
+
+app.use(cors({
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-};
-app.use(cors(corsOptions));
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// ✅ Explicitly allow preflight
+app.options('*', cors());
+
 app.use(express.json());
 
 // --- DATABASE CONNECTION ---
@@ -57,10 +63,10 @@ app.use('/api/expenses', expensesRouter);
 app.use('/api/payments', paymentsRouter);
 app.use('/api/profile', profileRouter);
 
-// This line correctly serves your uploaded logo files
+// ✅ Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- START SERVER ---
 app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+  console.log(`Server is running on port: ${port}`);
 });
