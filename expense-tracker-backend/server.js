@@ -10,10 +10,12 @@ const port = process.env.PORT || 5000;
 
 // --- MIDDLEWARE ---
 
-// ✅ CORS FIX: Place this at the top, before routes
+// ✅ Add all allowed frontend URLs here
 const allowedOrigins = [
-  'https://app.vabuilders.in',       // production frontend
-  'http://localhost:3000'            // local dev frontend
+  'https://app.vabuilders.in',              // production domain
+  'https://monumental-taffy-3bfb9d.netlify.app', // Netlify frontend
+  'http://localhost:3000',                  // local dev (React default)
+  'http://localhost:5173'                   // local dev (Vite)
 ];
 
 app.use(cors({
@@ -28,7 +30,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// ✅ Explicitly allow preflight
+// ✅ Explicitly handle preflight requests
 app.options('*', cors());
 
 app.use(express.json());
@@ -41,27 +43,27 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 });
 
-// --- DEFINE ROUTERS ---
-const projectsRouter = require('./routes/projects');
-const expensesRouter = require('./routes/expenses');
-const paymentsRouter = require('./routes/payments');
-const profileRouter = require('./routes/profile');
+// --- CLERK AUTHENTICATION ---
+// Apply Clerk *only* to API routes (not globally, otherwise CORS breaks)
+app.use('/api', ClerkExpressWithAuth());
 
-// --- CLERK AUTHENTICATION MIDDLEWARE ---
-app.use(ClerkExpressWithAuth());
-
-app.use((req, res, next) => {
+// Middleware to protect API routes
+app.use('/api', (req, res, next) => {
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    return res.sendStatus(200); // let preflight through
   }
-  // ✅ Check Clerk auth only for real API calls
   if (!req.auth || !req.auth.userId) {
     return res.status(401).send('Unauthenticated!');
   }
   next();
 });
 
-// --- USE ROUTERS (with /api prefix) ---
+// --- DEFINE ROUTERS ---
+const projectsRouter = require('./routes/projects');
+const expensesRouter = require('./routes/expenses');
+const paymentsRouter = require('./routes/payments');
+const profileRouter = require('./routes/profile');
+
 app.use('/api/projects', projectsRouter);
 app.use('/api/expenses', expensesRouter);
 app.use('/api/payments', paymentsRouter);
