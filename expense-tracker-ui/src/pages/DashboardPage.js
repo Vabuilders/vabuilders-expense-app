@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Import useCallback
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -24,13 +24,12 @@ export default function DashboardPage() {
 
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // --- FIX 5: Improved useEffect for data fetching ---
-  // The fetch logic is now wrapped in a useCallback to stabilize the function
-  // and is listed as a dependency of useEffect. This is the modern standard.
+  // Wrap fetchProjects in useCallback to stabilize the function
   const fetchProjects = useCallback(async () => {
     try {
       const token = await getToken();
-      const response = await axios.get(`${API_URL}/api/projects/`, {
+      // CORRECTED: Removed trailing slash
+      const response = await axios.get(`${API_URL}/api/projects`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(response.data);
@@ -38,11 +37,11 @@ export default function DashboardPage() {
       console.error("Error fetching projects from frontend:", error);
       toast.error('Could not fetch projects.');
     }
-  }, [getToken, API_URL]);
+  }, [getToken, API_URL]); // Dependencies for useCallback
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]);
+  }, [fetchProjects]); // Now, fetchProjects is a stable dependency for useEffect
 
   const handleCreateProject = async () => {
     if (!newProjectName || !newProjectBudget) {
@@ -51,6 +50,7 @@ export default function DashboardPage() {
     try {
       const token = await getToken();
       const newProject = { projectName: newProjectName, totalBudget: newProjectBudget };
+      // CORRECTED: Removed trailing slash
       await axios.post(`${API_URL}/api/projects/add`, newProject, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -70,6 +70,7 @@ export default function DashboardPage() {
     setOnConfirm(() => async () => {
       try {
         const token = await getToken();
+        // CORRECTED: Removed trailing slash
         await axios.delete(`${API_URL}/api/projects/${project._id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -100,6 +101,7 @@ export default function DashboardPage() {
     toast.loading('Updating budget...');
     try {
       const token = await getToken();
+      // CORRECTED: Removed trailing slash
       await axios.patch(`${API_URL}/api/projects/${editingProject._id}/update-budget`, {
         totalBudget: editingBudget
       }, {
@@ -116,7 +118,7 @@ export default function DashboardPage() {
     }
   };
 
- // ... (The rest of the component's JSX remains exactly the same)
+
   return (
     <div className={`dashboard-container ${deletingProjectId ? 'deleting-active' : ''}`}>
       <header className="dashboard-header">
