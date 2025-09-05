@@ -1,0 +1,79 @@
+/* GLOBAL STYLES */
+:root {
+  --bg-main: #f4f7fa;
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --white: #ffffff;
+  --text-dark: #212529;
+  --text-light: #6c757d;
+  --border-color: #dee2e6;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --success: #28a745;
+  --danger: #dc3545;
+  --info: #17a2b8;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+}
+
+/* === NEW ANIMATED LOGIN PAGE STYLES === */
+
+/* Define the animation for the gradient background */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* === ANIMATED LOGIN PAGE STYLES === */
+
+/* Define the animation for the gradient background */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Apply the styles and the animation to our container */
+.clerk-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #0f172a, #1e293b, #3b82f6, #0ea5e9);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+
+/* --- ADD THIS NEW CODE BELOW --- */
+
+/* 1. Define the animation for the form */
+@keyframes formAnimation {
+  from {
+    /* Start invisible and slightly lower */
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    /* End fully visible and in its normal position */
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. Apply the animation to the Clerk form card */
+/* This targets the white box specifically */
+.cl-card {
+  animation: formAnimation 0.8s ease-out forwards;
+}

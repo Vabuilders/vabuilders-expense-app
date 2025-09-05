@@ -1,0 +1,21 @@
+.profile-container { background-color: #f4f7f6; min-height: 100vh; }
+.profile-header { background-color: white; padding: 1.5rem 2rem; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+.profile-header h1 { font-size: 1.75rem; font-weight: bold; color: #333; margin: 0; }
+.back-link { color: #007bff; text-decoration: none; margin-bottom: 0.5rem; display: inline-block; }
+.profile-main { padding: 2rem; max-width: 800px; margin: 0 auto; }
+.profile-form-card { background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.profile-form-card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+.profile-form-card p { color: #666; margin-bottom: 2rem; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #333; }
+.form-group input[type="text"] { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+.form-actions { margin-top: 2rem; text-align: right; }
+.save-profile-btn { background-color: #007bff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+.save-profile-btn:hover { background-color: #0056b3; }
+
+/* --- FIX: Styling for the new logo upload area --- */
+.logo-upload-area { display: block; cursor: pointer; border: 2px dashed #ccc; border-radius: 8px; padding: 1rem; transition: border-color 0.2s; }
+.logo-upload-area:hover { border-color: #007bff; }
+.current-logo-preview { display: flex; align-items: center; gap: 1rem; }
+.current-logo-preview img { height: 50px; max-width: 150px; object-fit: contain; border: 1px solid #eee; background-color: #f8f9fa; }
+.current-logo-preview span { color: #666; font-style: italic; }

@@ -1,0 +1,143 @@
+import React from "react";
+
+const formatDate = (d) => d ? new Date(d).toISOString().split("T")[0] : "N/A";
+const formatCurrency = (n) => (Number(n) || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+
+// --- ADD THIS ARRAY TO DEFINE THE CORRECT ORDER ---
+const CATEGORY_ORDER = [
+  'Labour',
+  'Cement & Aggregates',
+  'Steel',
+  'Carpenter Work',
+  'Electrical',
+  'Plumbing',
+  'Painting',
+  'Advances Given (Reminders)',
+  'Staff Salaries',
+  'Food and Snacks',
+  'Personal Expenses',
+  'Other Miscellaneous Expenses',
+];
+
+function PDFPreview({ project, profile, expenses, expensesInPeriod, netFlowInPeriod, dateRange }) {
+  if (!project || !profile) return <div className="pdf-page">Loading...</div>;
+
+  const totalsByCategory = expenses.reduce((acc, e) => {
+    const cat = e.category || "Uncategorized";
+    acc[cat] = (acc[cat] || 0) + (Number(e.total) || 0);
+    return acc;
+  }, {});
+
+  // --- ADD THIS SORTING LOGIC ---
+  // Sort the categories based on the predefined order
+  const sortedTotals = Object.entries(totalsByCategory).sort(([catA], [catB]) => {
+      const indexA = CATEGORY_ORDER.indexOf(catA);
+      const indexB = CATEGORY_ORDER.indexOf(catB);
+
+      // If both categories are in our defined order, sort by their index
+      if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB;
+      }
+      // If only category A is in the order, it should come first
+      if (indexA !== -1) {
+          return -1;
+      }
+      // If only category B is in the order, it should come first
+      if (indexB !== -1) {
+          return 1;
+      }
+      // If neither category is in our defined order, sort them alphabetically
+      return catA.localeCompare(catB);
+  });
+
+
+  const fullAddress = [profile.addressLine1, profile.addressLine2, profile.addressLine3]
+    .filter(Boolean)
+    .join(", ");
+
+  const backendUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const logoUrl = profile.logoUrl
+    ? `${backendUrl}${profile.logoUrl.startsWith("/") ? "" : "/"}${profile.logoUrl}`
+    : "https://via.placeholder.com/100x100.png?text=Logo";
+
+  return (
+    <div className="pdf-page">
+      {/* Header */}
+      <div className="pdf-header-corp">
+        <img
+          src={logoUrl}
+          alt="Company Logo"
+          style={{ height: 60, objectFit: "contain" }}
+        />
+        <div className="pdf-company-info">
+          <div className="pdf-company-name-corp">{profile.companyName}</div>
+          <div className="pdf-company-address-corp">{fullAddress}</div>
+        </div>
+      </div>
+
+      {/* Title */}
+      <div className="pdf-report-title-corp">
+        Expense Report – {project.projectName}
+        <div style={{ fontSize: "9pt", color: "#64748b", marginTop: 4 }}>
+          Period: {formatDate(dateRange.start)} → {formatDate(dateRange.end)}
+        </div>
+      </div>
+
+      {/* Metrics Summary */}
+      <div className="pdf-metrics-grid">
+        <div className="metric-card">
+          <div className="metric-label">Total Project Budget</div>
+          <div className="metric-value">₹ {formatCurrency(project.totalBudget)}</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">Owner Paid (Total to date)</div>
+          <div className="metric-value">₹ {formatCurrency(project.ownerPaid)}</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">Expenses in Period</div>
+          <div className="metric-value">₹ {formatCurrency(expensesInPeriod)}</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">Net Flow in Period</div>
+          <div className={`metric-value ${netFlowInPeriod >= 0 ? 'success' : 'danger'}`}>
+            ₹ {formatCurrency(netFlowInPeriod)}
+          </div>
+        </div>
+      </div>
+
+      {/* Expense Breakdown */}
+      <div className="pdf-section-title-corp">Expense Breakdown for Period</div>
+      <table className="pdf-table-corp">
+        <thead>
+          <tr><th>Category</th><th className="amount">Amount</th></tr>
+        </thead>
+        <tbody>
+          {/* --- MODIFIED: Use the new 'sortedTotals' array --- */}
+          {sortedTotals.map(([cat, amt]) => (
+            <tr key={cat}>
+              <td>{cat}</td>
+              <td className="amount">₹ {formatCurrency(amt)}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total Expenses in Period</td>
+            <td className="amount">₹ {formatCurrency(expensesInPeriod)}</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      {/* Chart placeholder */}
+      <div className="pdf-section-title-corp">Expense Distribution by Category</div>
+      <p style={{ color: "#94a3b8", fontSize: "9pt" }}>(Chart visualization can be added here)</p>
+
+      {/* Footer */}
+      <div className="pdf-footer-corp">
+        Confidential – Generated by Expense Tracker • {new Date().toLocaleDateString()}
+      </div>
+    </div>
+  );
+}
+
+export default PDFPreview;

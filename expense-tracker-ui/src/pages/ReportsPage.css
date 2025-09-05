@@ -1,0 +1,214 @@
+.reports-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.reports-header {
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  color: white;
+  padding: 1.5rem 2rem;
+}
+.reports-header h1 {
+  margin: 0.25rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+.back-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.back-link:hover { text-decoration: underline; }
+
+.reports-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.report-options {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 20px;
+}
+.report-options h2 {
+  margin-top: 0;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.generate-btn,
+.generate-btn-secondary {
+  width: 100%;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+.generate-btn {
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+}
+.generate-btn:hover { background-color: #0369a1; }
+.generate-btn-secondary {
+  background-color: white;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+.generate-btn-secondary:hover {
+  background-color: #dc2626;
+  color: white;
+}
+
+.pdf-preview-container {
+  background: #f1f5f9;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+}
+
+.pdf-page {
+  background: white;
+  padding: 2.5cm;
+  width: 21cm;
+  min-height: 29.7cm;
+  margin: auto;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  color: #1e293b;
+  font-size: 10pt;
+}
+
+/* Corporate header */
+.pdf-header-corp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #0ea5e9;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.pdf-company-info {
+  text-align: right;
+}
+.pdf-company-name-corp {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+.pdf-company-address-corp {
+  font-size: 9pt;
+  color: #475569;
+}
+
+/* Report title */
+.pdf-report-title-corp {
+  text-align: center;
+  font-size: 15pt;
+  font-weight: 600;
+  margin: 20px 0;
+  color: #0f172a;
+}
+
+/* Summary metrics cards */
+.pdf-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+.metric-card {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+.metric-label {
+  font-size: 9pt;
+  color: #64748b;
+}
+.metric-value {
+  font-size: 12pt;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+/* Tables */
+.pdf-section-title-corp {
+  font-size: 12pt;
+  font-weight: 600;
+  margin: 20px 0 10px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+  color: #0ea5e9;
+}
+.pdf-table-corp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin-bottom: 20px;
+}
+.pdf-table-corp th, .pdf-table-corp td {
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+}
+.pdf-table-corp th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+}
+.pdf-table-corp td.amount {
+  text-align: right;
+}
+.pdf-table-corp tfoot td {
+  font-weight: bold;
+  background: #f8fafc;
+}
+
+/* Footer */
+.pdf-footer-corp {
+  margin-top: auto;
+  font-size: 8pt;
+  text-align: center;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 8px;
+}
+
+/* --- ADD THIS AT THE BOTTOM of ReportsPage.css --- */
+.metric-value.success {
+  color: #28a745;
+}
+.metric-value.danger {
+  color: #dc3545;
+}

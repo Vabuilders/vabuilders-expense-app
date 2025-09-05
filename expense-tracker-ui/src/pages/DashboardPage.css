@@ -1,0 +1,399 @@
+:root {
+  --bg-main: #f4f7fa;
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --white: #ffffff;
+  --text-dark: #212529;
+  --text-light: #6c757d;
+  --border-color: #dee2e6;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --success: #28a745;
+  --danger: #dc3545;
+}
+
+.dashboard-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-main);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  background-color: var(--white);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-dark);
+}
+
+.create-project-btn {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.create-project-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.project-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-card {
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.project-name {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.project-financials {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.financial-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.financial-item .label {
+  color: var(--text-light);
+}
+
+.financial-item .value {
+  font-weight: 600;
+}
+
+.financial-item.total {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.financial-item .value.success {
+  color: var(--success);
+}
+.financial-item .value.danger {
+  color: var(--danger);
+}
+.financial-item .value.info {
+  color: #17a2b8; /* A nice teal color */
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.setup-method p {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.radio-group {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+.radio-group input[type="radio"] {
+    margin-top: 0.25rem;
+    margin-right: 1rem;
+}
+.radio-group label {
+    font-weight: normal;
+    margin: 0;
+    display: flex; /* This is correct */
+    flex-direction: column; /* This is correct */
+}
+
+/* --- ADD THESE NEW RULES BELOW THE .radio-group label --- */
+
+.radio-group label strong {
+    margin-bottom: 0.25rem; /* Adds a small space between the title and the description */
+}
+
+.radio-group label small {
+    line-height: 1.4; /* Improves readability of the description text */
+}
+.radio-group label small {
+    color: var(--text-light);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-secondary {
+  background-color: #e9ecef;
+  color: var(--text-dark);
+}
+
+/* --- ADD THIS NEW CODE AT THE BOTTOM --- */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.date-selector-global {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-selector-global label {
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.date-selector-global input[type="date"] {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+/* --- ADD THIS NEW CODE AT THE BOTTOM --- */
+.card-actions {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Pushes items to opposite ends */
+  align-items: center; /* Vertically aligns items */
+}
+
+.manage-btn {
+  background-color: var(--success);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.manage-btn:hover {
+  background-color: #218838;
+}
+/* --- ADD THIS AT THE BOTTOM of DashboardPage.css --- */
+.report-btn {
+  background-color: #6c757d;
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.report-btn:hover {
+  background-color: #5a6268; /* A darker grey for hover */
+}
+
+/* --- ADD THIS NEW CODE AT THE BOTTOM of DashboardPage.css --- */
+.header-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.settings-link {
+    font-size: 1.75rem;
+    text-decoration: none;
+    color: var(--text-light);
+    transition: transform 0.2s, color 0.2s;
+}
+
+.settings-link:hover {
+    transform: rotate(45deg);
+    color: var(--primary-color);
+}
+
+.dashboard-container.deleting-active {
+  background-color: #ffebe9; /* Light red background tint */
+}
+.dashboard-container.deleting-active::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(220, 53, 69, 0.5);
+  mix-blend-mode: multiply;
+  z-index: 50;
+  pointer-events: none;
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.project-card {
+  position: relative; /* Needed for the delete button positioning */
+}
+
+.project-card.card-deleting {
+  border: 2px solid var(--danger);
+  transform: scale(1.02);
+}
+
+.delete-project-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f1f5f9;
+  color: var(--text-light);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-project-btn:hover {
+  background-color: var(--danger);
+  color: var(--white);
+  transform: scale(1.1);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--white);
+  /* other styles... */
+}
+
+/* --- ADD THIS AT THE BOTTOM of DashboardPage.css --- */
+.project-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-budget-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--text-light);
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.edit-budget-btn:hover {
+  color: var(--primary-color);
+  background-color: #e9ecef;
+}

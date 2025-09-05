@@ -1,0 +1,116 @@
+.app-header {
+  background-color: var(--white);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-navigation { display: flex; flex-direction: column; align-items: flex-start; }
+.back-link-expenses { color: var(--text-light); text-decoration: none; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; transition: color 0.2s; }
+.back-link-expenses:hover { color: var(--primary-color); }
+.app-header h1 { margin: 0; font-size: 1.5rem; }
+.project-details { display: flex; align-items: center; gap: 1.5rem; }
+.date-selector { display: flex; align-items: center; gap: 0.5rem; }
+.date-selector label { font-weight: 600; color: var(--text-light); }
+.date-selector input[type="date"] { padding: 0.3rem 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; font-family: inherit; }
+
+.main-content { padding: 2rem; }
+.tab-navigation { display: flex; flex-wrap: wrap; gap: 0.5rem; border-bottom: 2px solid var(--border-color); margin-bottom: 2rem; }
+.tab-link { padding: 0.75rem 1.5rem; border: none; background: none; cursor: pointer; font-size: 1rem; color: var(--text-light); border-bottom: 3px solid transparent; transition: all 0.2s ease-in-out; }
+.tab-link.active { color: var(--primary-color); font-weight: 600; border-bottom-color: var(--primary-color); }
+
+.tab-content-area { background-color: var(--white); padding: 2rem; border-radius: 8px; box-shadow: var(--shadow); }
+.expense-table-container h2 { margin-top: 0; font-size: 1.25rem; }
+.expense-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+.expense-table th, .expense-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+.expense-table th { font-weight: 600; color: var(--text-light); font-size: 0.85rem; text-transform: uppercase; }
+.row-total { font-weight: 600; min-width: 100px; }
+.cell-input { width: 95%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; transition: border-color 0.2s, box-shadow 0.2s; max-width: 150px; }
+.cell-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); }
+
+.delete-button {
+  background-color: transparent;
+  color: var(--danger);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+.delete-button:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #a71d2a;
+}
+
+.add-item-button { margin-top: 1.5rem; background: none; border: 1px dashed var(--primary-color); color: var(--primary-color); padding: 0.6rem 1.2rem; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.add-item-button:hover { background-color: rgba(0, 123, 255, 0.05); }
+
+.summary-footer {
+    background-color: var(--white); padding: 1rem 2rem; border-top: 1px solid var(--border-color);
+    display: flex; justify-content: flex-end; align-items: center; gap: 1.5rem;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05); position: sticky; bottom: 0; z-index: 10;
+}
+.grand-total { font-size: 1.25rem; font-weight: 600; }
+.grand-total span { color: var(--primary-color); }
+.save-button { background-color: var(--primary-color); color: var(--white); padding: 0.75rem 2rem; border: none; border-radius: 5px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+.save-button:hover { background-color: var(--primary-hover); }
+
+.subsection { margin-top: 2.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem; }
+.subsection:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+.subsection h3 { font-size: 1rem; font-weight: 600; color: var(--text-light); margin-bottom: 1rem; }
+.subsection-note { color: var(--text-light); margin-top: -0.5rem; margin-bottom: 1.5rem; font-style: italic; }
+
+.expense-table .description-column { width: 50%; }
+.expense-table .narrow-column { width: 20%; }
+.expense-table .action-column { width: 5%; text-align: center; }
+
+.report-btn-header {
+  background-color: var(--info); color: var(--white); border: none; padding: 0.5rem 1rem;
+  border-radius: 5px; cursor: pointer; font-weight: 500; transition: background-color 0.2s;
+  text-decoration: none; display: inline-block;
+}
+.report-btn-header:hover { background-color: #138496; }
+
+/* Modal styles */
+.modal-backdrop {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); display: flex;
+  justify-content: center; align-items: center; z-index: 100;
+}
+.modal-content {
+  background: var(--white); padding: 2rem; border-radius: 8px;
+  width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.modal-content h2 { margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+.form-group input { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
+.btn-primary, .btn-secondary { padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; border: none; }
+.btn-primary { background-color: var(--primary-color); color: var(--white); }
+.btn-secondary { background-color: #e9ecef; color: var(--text-dark); }
+/* --- ADD THIS NEW CODE AT THE BOTTOM --- */
+.confirmation-modal p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.btn-danger {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background-color: var(--danger);
+  color: var(--white);
+}

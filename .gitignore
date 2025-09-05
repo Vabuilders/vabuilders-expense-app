@@ -1,0 +1,12 @@
+# Node modules
+/node_modules
+/expense-tracker-backend/node_modules
+/expense-tracker-ui/node_modules
+
+# Environment variables
+.env
+/expense-tracker-backend/.env
+/expense-tracker-ui/.env
+
+# Frontend build folder
+/expense-tracker-ui/build

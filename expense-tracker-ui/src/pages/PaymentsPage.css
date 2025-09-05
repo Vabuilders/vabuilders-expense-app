@@ -1,0 +1,219 @@
+:root {
+  --bg-main: #f4f7fa;
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --white: #ffffff;
+  --text-dark: #212529;
+  --text-light: #6c757d;
+  --border-color: #dee2e6;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --success: #28a745;
+}
+
+.payments-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+}
+
+.payments-header {
+    background-color: var(--white);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.payments-header h1 {
+    margin: 0.25rem 0;
+    font-size: 1.75rem;
+}
+
+.payments-header p {
+    margin: 0;
+    color: var(--text-light);
+}
+
+.back-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.total-paid {
+    text-align: right;
+}
+
+.total-paid span {
+    display: block;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.total-paid strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--success);
+}
+
+.add-payment-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-payment-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.timeline {
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 1rem 1rem 2rem 3rem;
+    border-left: 2px solid var(--border-color);
+}
+
+.timeline-item:last-child {
+    border-left: 2px solid transparent;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -9px; /* (dot width / 2) + (border width) */
+    top: 1.25rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: 3px solid var(--bg-main);
+}
+
+.timeline-content {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.timeline-date {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.timeline-amount {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.timeline-description {
+    margin: 0.5rem 0 0 0;
+    color: var(--text-dark);
+}
+
+/* Reusing Modal styles from Dashboard */
+.modal-backdrop {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); display: flex;
+  justify-content: center; align-items: center; z-index: 100;
+}
+.modal-content {
+  background: var(--white); padding: 2rem; border-radius: 8px;
+  width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.modal-content h2 {
+  margin-top: 0; border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem; margin-bottom: 1.5rem;
+}
+.form-group { margin-bottom: 1.5rem; }
+.form-group label {
+  display: block; margin-bottom: 0.5rem; font-weight: 600;
+}
+.form-group input, .form-group textarea {
+  width: 100%; padding: 0.75rem; border: 1px solid var(--border-color);
+  border-radius: 6px; font-size: 1rem;
+}
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;
+}
+.btn-primary, .btn-secondary {
+  padding: 0.75rem 1.5rem; border: none; border-radius: 6px;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+}
+.btn-primary { background-color: var(--primary-color); color: var(--white); }
+.btn-secondary { background-color: #e9ecef; color: var(--text-dark); }
+
+/* --- ADD THIS AT THE BOTTOM of PaymentsPage.css --- */
+.timeline-content {
+    position: relative; /* Needed for positioning the actions */
+}
+
+.timeline-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.timeline-action-btn {
+    background: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.timeline-action-btn.edit {
+    color: #007bff;
+}
+.timeline-action-btn.edit:hover {
+    background-color: #e7f3ff;
+    border-color: #007bff;
+}
+
+.timeline-action-btn.delete {
+    color: #dc3545;
+}
+.timeline-action-btn.delete:hover {
+    background-color: #fbebee;
+    border-color: #dc3545;
+}
+
+/* Re-using danger button style from other files */
+.btn-danger {
+  background-color: #dc3545;
+  color: var(--white);
+}
+
+.confirmation-modal p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
