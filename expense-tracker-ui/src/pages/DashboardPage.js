@@ -22,11 +22,12 @@ export default function DashboardPage() {
   const [editingProject, setEditingProject] = useState(null);
   const [editingBudget, setEditingBudget] = useState('');
 
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchProjects = async () => {
     try {
       const token = await getToken();
-      const response = await axios.get('http://localhost:5000/api/projects/', {
+      const response = await axios.get(`${API_URL}/api/projects/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(response.data);
@@ -47,7 +48,7 @@ export default function DashboardPage() {
     try {
       const token = await getToken();
       const newProject = { projectName: newProjectName, totalBudget: newProjectBudget };
-      await axios.post('http://localhost:5000/api/projects/add', newProject, {
+      await axios.post(`${API_URL}/api/projects/add`, newProject, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Project Created Successfully!');
@@ -62,11 +63,11 @@ export default function DashboardPage() {
 
   const handleDeleteClick = (project) => {
     setConfirmMessage(`Delete "${project.projectName}"? This action is permanent.`);
-    setDeletingProjectId(project._id); // <-- THIS LINE HAS BEEN CORRECTED
+    setDeletingProjectId(project._id);
     setOnConfirm(() => async () => {
       try {
         const token = await getToken();
-        await axios.delete(`http://localhost:5000/api/projects/${project._id}`, {
+        await axios.delete(`${API_URL}/api/projects/${project._id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success('Project deleted.');
@@ -96,7 +97,7 @@ export default function DashboardPage() {
     toast.loading('Updating budget...');
     try {
       const token = await getToken();
-      await axios.patch(`http://localhost:5000/api/projects/${editingProject._id}/update-budget`, {
+      await axios.patch(`${API_URL}/api/projects/${editingProject._id}/update-budget`, {
         totalBudget: editingBudget
       }, {
         headers: { Authorization: `Bearer ${token}` },

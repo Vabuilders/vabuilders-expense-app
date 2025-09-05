@@ -14,12 +14,14 @@ function CompanyProfilePage() {
     const [logoFile, setLogoFile] = useState(null);
     const [logoPreview, setLogoPreview] = useState("https://via.placeholder.com/150x50.png?text=Your+Logo");
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 toast.loading('Loading profile...');
                 const token = await getToken();
-                const response = await axios.get('http://localhost:5000/api/profile/', {
+                const response = await axios.get(`${API_URL}/api/profile/`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 toast.dismiss();
@@ -31,7 +33,7 @@ function CompanyProfilePage() {
                     setAddressLine3(profile.addressLine3 || '');
                     if (profile.logoUrl) {
                         const url = profile.logoUrl.startsWith('/') ? profile.logoUrl : `/${profile.logoUrl}`;
-                        setLogoPreview(`http://localhost:5000${url}`);
+                        setLogoPreview(`${API_URL}${url}`);
                     }
                 }
             } catch (error) {
@@ -56,7 +58,7 @@ function CompanyProfilePage() {
         toast.loading('Saving changes...');
         try {
             const token = await getToken();
-            const response = await axios.post('http://localhost:5000/api/profile/update', formData, {
+            const response = await axios.post(`${API_URL}/api/profile/update`, formData, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}` 
@@ -66,7 +68,7 @@ function CompanyProfilePage() {
             toast.success('Profile updated successfully!');
             if (response.data.logoUrl) {
                 const url = response.data.logoUrl.startsWith('/') ? response.data.logoUrl : `/${response.data.logoUrl}`;
-                setLogoPreview(`http://localhost:5000${url}`);
+                setLogoPreview(`${API_URL}${url}`);
             }
         } catch (error) {
             toast.dismiss();
